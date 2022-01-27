@@ -1,0 +1,103 @@
+<div id="remove{{ group[0].Id }}" class="dropup border border-right-0 border-dark rounded chat">
+
+
+    <a type="button" id="Chat{{ group[0].id }}" class="d-flex w-250 p-1 justify-content-center align-items-center btn dropdown-togglee cursor" data-group-id="{{ group[0].id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="d-flex align-items-center justify-content-center">
+            <h3 class="fs-xs m-2"><b>{{ group[0].name }}</b></h3>
+        </div>
+    </a>
+
+
+    <div class="dropdown-menu w-250 chat-menu">
+        <div class="d-flex align-items-center">
+
+            <div id="close{{ group[0].id }}" class="ml-3 mr-1 close" data-group="{{ group[0].id }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                    <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                </svg>
+            </div>
+
+            <div id="upload{{ group[0].id }}" data-group="{{ group[0].id }}">
+                {{ form_start(uploadForm, {'action': path('app_intranet_tool_chat_upload', {'id':group[0].id}), 'attr':{'data-group':group[0].id}}) }}
+                    <label for="form_upload_add_{{ group[0].id }}_file" class="file-btn upload" data-group="{{ group[0].id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+                            <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+                        </svg>
+                    </label>
+                    <div class="input_div">
+                        {{ form_row(uploadForm.file) }}
+                        {{ form_rest(uploadForm) }}
+                    </div>
+                {{ form_end(uploadForm) }}
+            </div>
+
+            <h3 class="fs-xs m-2">
+                {{ group[0].name }}
+                <div class="d-flex align-items-center" title="online">
+                    {% if (lastSeen == "Active") %}
+                        <div class="online"></div>
+                        <small id="ChatInfo{{ group[0].id }}" class="d-block p-1">En Ligne</small>
+                    {% else %}
+                        <small id="ChatInfo{{ group[0].id }}" class="d-block p-1">
+                            Dernier message :
+                            {{ lastSeen }}
+                        </small>
+                    {% endif %}
+                </div>
+            </h3>
+
+        </div>
+
+        <div class="dropdown-divider"></div>
+
+        <div class="rounded d-flex flex-column chat-box-min m-2" id="chatBox{{ group[0].id }}">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.AppUser == user %}
+
+                        <p class="rtext align-self-end border rounded p-2 mb-1 a">
+                            {% if(message.Message|slice(0, 4) == 'img:' ) %}
+                                <img src="{{ asset(message.Message|slice(4)) }}" class="rtext" alt=""/>
+                            {% elseif (message.Message|slice(0, 5) == 'file:') %}
+                                <a href="{{ asset(message.Message|slice(5)) }}" download='' class='a'>Télécharger <i class='fas fa-download'></i></a>
+                            {% else %}
+                                {{ message.Message }}
+                            {% endif %}
+                            <small class="d-block">
+                                <b>{{ user.Name }} {{ user.Lastname }}</b> <br>
+                                {{ message.CreatedAt|format_datetime('short', 'short', locale='fr') }}
+                            </small>
+                        </p>
+
+                    {% else %}
+
+                        <p class="ltext align-self-start border rounded p-2 mb-1">
+                            {% if(message.Message|slice(0, 4) == 'img:' ) %}
+                                <img src="{{ asset(message.Message|slice(4)) }}" class="ltext" alt=""/>
+                            {% elseif (message.Message|slice(0, 5) == 'file:') %}
+                                <a href="{{ asset(message.Message|slice(5)) }}" download='' class='a'>Télécharger <i class='fas fa-download'></i></a>
+                            {% else %}
+                                {{ message.Message }}
+                            {% endif %}
+                            <small class="d-block">
+                                <b>{{ message.AppUser.Name }} {{ message.AppUser.Lastname }}</b> <br>
+                                {{ message.CreatedAt|format_datetime('short', 'short', locale='fr') }}
+                            </small>
+                        </p>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info text-center">
+                    <i class="fa fa-comments d-block fs-big"></i>
+                    Pas de message pour l'instant, commencer la conversation !
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="input-group fixed-bottom ">
+            <textarea cols="3" id="Message{{ group[0].id }}" class="form-control mb-2 message" style="resize : none;" data-group="{{ group[0].id }}"></textarea>
+        </div>
+
+    </div>
+</div>

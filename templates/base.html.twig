@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="{{ asset('assets/img/logo.png') }}">
+    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+    {% block stylesheetsLibraries %}
+        {{ encore_entry_link_tags('app') }}
+        <link rel="stylesheet" href="{{ asset('assets/css/chat.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('assets/css/chosen.min.css') }}"/>
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"/>
+    {% endblock %}
+
+    {% block javascriptsLibraries %}
+        {{ encore_entry_script_tags('app') }}
+        <script src="{{ asset('assets/library/jquery-3.6.0.min.js') }}"></script>
+        <script src="{{ asset('assets/library/chosen.jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/library/bootstrap.bundle.min.js') }}"></script>
+    {% endblock %}
+</head>
+<body>
+{% block body %}{% endblock %}
+{% block modal %}
+    {{ render(controller( 'App\\Controller\\FrontChatController::chatApp' )) }}
+{% endblock %}
+</body>
+</html>

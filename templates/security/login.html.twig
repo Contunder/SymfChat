@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Chat!{% endblock %}
+
+{% block body %}
+<body class="d-flex justify-content-center align-items-center vh-100">
+    <div class="w-400 p-5 shadow rounded">
+        <form method="post" action="{{ path('security_login') }}">
+            <div class="d-flex justify-content-center align-items-center flex-column">
+
+                <img src="{{ asset('assets/img/logo.png') }}" class="w-25" alt="Logo" />
+                <h3 class="display-4 fs-1 text-center">TEXT_ME</h3>
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nom d'Utilisateur</label>
+                <label class="d-flex align-content-center">
+                    <input type="text" class="form-control" name="_username">
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Mot de Passe</label>
+                <label class="d-flex align-content-center">
+                    <input type="password" class="form-control d-flex align-content-center" name="_password">
+                </label>
+            </div>
+
+            <div class="d-flex justify-content-center align-items-center">
+                <button type="submit" class="btn btn-primary">CONNECTION</button>
+                <a href="{{ path('security_signup') }}" class="m-3">S'enregistrer</a>
+            </div>
+
+            </form>
+    </div>
+</body>
+{% endblock %}

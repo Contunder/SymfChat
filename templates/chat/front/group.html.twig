@@ -1,0 +1,32 @@
+{% form_theme formGroup 'bootstrap_5_horizontal_layout.html.twig' %}
+    <div id="newGroup" class="dropup border border-dark rounded notification w-200 show">
+        <a type="button" class="d-flex w-200 p-1 justify-content-center align-items-center btn dropdown-togglee" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+            <h5 class="fs-xs m-2">Nouvelle Conversation</h5>
+        </a>
+
+        <div class="dropdown-menu w-200 show p-3" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(0px, -45px);" data-popper-placement="top-start">
+            {{ form_start(formGroup) }}
+
+                <div id="close" class="m-2 close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                        <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                    </svg>
+                </div><br>
+
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    {{ form_widget(formGroup.Name) }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Utilisateurs</label><br>
+                    {{ form_widget(formGroup.DirectoryToGroups ) }}
+                </div>
+            <input type="submit" class="formGroup" style="visibility: hidden"></input>
+            {{ form_end(formGroup) }}
+                <div class="d-flex justify-content-center align-items-center">
+                    <button id="createGroup" class="btn btn-primary createGroup">Crée</button>
+                </div>
+
+    </div>

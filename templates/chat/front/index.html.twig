@@ -1,0 +1,79 @@
+<div class="fixed-bottom d-flex justify-content-end">
+
+    <nav class="nav rounded-top bg-light" id="front">
+
+        <div class="nav" id="Chat"></div>
+
+        <div class="dropup border border-dark rounded notification w-200">
+            <a type="button" class="d-flex w-200 p-1 justify-content-center align-items-center btn dropdown-togglee" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="d-flex align-items-end">
+                    <h5 class="fs-xs m-2">{{ user[0].name }} {{ user[0].lastname }}</h5>
+                </div>
+            </a>
+
+            <div class="dropdown-menu w-200">
+                {% if groups %}
+                    {% for group in groups %}
+                        <a id="Group{{ group.id }}" class="dropdown-item d-flex" data-group-id="{{ group.id }}">
+                            <div class="w-125 element-survole" data-group-id="{{ group.id }}">
+                                {{ group.Name }}<br>
+                                <small>
+                                    {{ group.UpdateAt|format_datetime('short', 'short', locale='fr') }}
+                                </small>
+                            </div>
+                            <div class="ml-3">
+                                <div id="delete{{ group.id }}" class="close delete" data-group-id="{{ group.id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                        <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                                    </svg>
+                                </div><br>
+
+                                <div id="update{{ group.id }}" class="close update" data-group-id="{{ group.id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                                        <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+                    {% else %}
+                        <div class="alert alert-info text-center">
+                            <i class="fa fa-comments d-block fs-big"></i>
+                            Pas de message pour l'instant,<br> démarer une groupertation
+                        </div>
+                        <div class="dropdown-divider"></div>
+                    {% endfor %}
+                {% endif %}
+                <a class="dropdown-item newGroup" ><small class="text-black opacity-75">Nouveau Groupe</small></a>
+            </div>
+        </div>
+
+    </nav>
+    </div>
+    <div id="hide" class="visually-hidden">
+        <div id="copy"></div>
+        <p id="user-message" class='rtext align-self-end border rounded p-2 mb-1'>
+        </p>
+        <p id="message" class='rtext align-self-end border rounded p-2 mb-1'>
+        </p>
+        <small class='d-block' id="user-name"><b> </b></small>
+        <div id="progress" class='progress' style='width:200px'>
+            <div class='progress-bar' role='progressbar' style='width: 0%' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100'></div>
+        </div>
+    </div>
+{% block javascripts %}
+    <script src="{{ asset('assets/js/frontChat.js') }}"></script>
+    <script src="{{ asset('assets/js/frontGroup.js') }}"></script>
+    <script>
+        frontGroup.init({{ user[0].id }},"{{ user[0].name }}", "{{ user[0].lastname }}");
+        frontGroup.initGroup();
+        frontChat.init({{ user[0].id }},"{{ user[0].name }}", "{{ user[0].lastname }}");
+        frontChat.initWebSocket();
+        frontChat.clone();
+        frontChat.initForm();
+    </script>
+{% endblock javascripts %}
+
