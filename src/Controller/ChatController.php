@@ -51,7 +51,7 @@ class ChatController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $newGroup->addUserToGroups($this->getUser());
             $newGroup->setCreatedAt(new DateTimeImmutable());
-            $newGroup->setUpdateAt(new DateTime());
+            $newGroup->setUpdatedAt(new DateTime());
             $this->entityManager->persist($newGroup);
             $this->entityManager->flush();
             return $this->redirectToRoute('home');

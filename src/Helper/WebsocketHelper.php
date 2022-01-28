@@ -72,8 +72,8 @@ class WebsocketHelper implements MessageComponentInterface
                         $newMessage->setMessage($newMSG->message);
                     }
                     $newMessage->setCreatedAt(new DateTimeImmutable());
-                    $newMessage->setUpdateAt(new DateTime());
-                    $group->setUpdateAt(new DateTime());
+                    $newMessage->setUpdatedAt(new DateTime());
+                    $group->setUpdatedAt(new DateTime());
                     $newMessage->addMessageToGroups($groupRepo->find($newMSG->messGroupId));
                     //$this->entityManager->persist($newMessage);
                     //$this->entityManager->flush();

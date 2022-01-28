@@ -61,7 +61,7 @@ class GroupRepository extends ServiceEntityRepository
     public function lastSeen(int $id): string
     {
 
-        $timestamp = $this->find($id)->getUpdateAt()->getTimestamp();
+        $timestamp = $this->find($id)->getUpdatedAt()->getTimestamp();
         $strTime = array("seconde(s)", "minute(s)", "heure(s)", "jour", "mois", "année");
         $length = array("60","60","24","30","12","10");
 

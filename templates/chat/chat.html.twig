@@ -110,7 +110,7 @@
     {% block javascripts %}
         <script src="{{ asset('assets/js/Chat.js') }}"></script>
         <script>
-            Chat.init({{ user.id }}, {{ group[0].id }}, "{{ user.Name }}", "{{ user.Lastname }}");
+            Chat.init({{ user.id }}, {{ group[0].id }}, "{{ user.Firstname }}", "{{ user.Lastname }}");
             Chat.initWebSocket();
             Chat.initForm();
             Chat.clone();

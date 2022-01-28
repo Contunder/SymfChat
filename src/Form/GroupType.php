@@ -34,7 +34,7 @@ class GroupType extends AbstractType
                 [
                     'label' => 'Utilisateurs',
                     'multiple' => true,
-                    'attr'=>['class' => 'form-control chosen-1.8.7-select',
+                    'attr'=>['class' => 'form-control chosen-select',
                              'data-placeholder' => '---------------- Sélection des Utilisateurs ----------------'],
                     'placeholder' => '-- Sélection --',
                     'class' => User::class,
@@ -42,11 +42,11 @@ class GroupType extends AbstractType
                         return $er->createQueryBuilder('d')
                             ->where('d.id != :id')
                             ->setParameter('id', $id)
-                            ->addOrderBy('d.name', 'ASC');
+                            ->addOrderBy('d.firstname', 'ASC');
                     },
                     'choice_label' => function ($user) {
                         /** @var User $user */
-                        return $user->getName().' '.$user->getLastname();
+                        return $user->getFirstname().' '.$user->getLastname();
                     }
                 ]
             );

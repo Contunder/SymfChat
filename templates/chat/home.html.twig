@@ -11,7 +11,7 @@
                 <img src="{{ user.pp }}" class="w-25 rounded-circle" alt="User Img"/>
                 <h3 class="fs-xs m-2"><b>{{ user.Username }}</b><br>
                     {{ user.Lastname }}
-                    {{ user.Name }}</h3>
+                    {{ user.Firstname }}</h3>
             </div>
             <a href="{{ path('security_logout') }}" class="btn btn-dark">Déconnection</a>
         </div>
@@ -26,7 +26,7 @@
                         <h3 class="fs-xs m-2">
                             {{ group.Name }}<br>
                             <small>
-                                {{ group.UpdateAt|format_datetime('full', 'short', locale='fr') }}
+                                {{ group.UpdatedAt|format_datetime('full', 'short', locale='fr') }}
                             </small>
                         </h3>
                     </div>

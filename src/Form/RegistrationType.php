@@ -22,7 +22,7 @@ class RegistrationType extends AbstractType
                     'placeholder' => 'Nom d\'Utilisateur',
                     'class'=>'form-control'
                 ]])
-            ->add('name', TextType::class,[
+            ->add('firstname', TextType::class,[
                 'attr'=>[
                     'placeholder' => 'Nom',
                     'class'=>'form-control'

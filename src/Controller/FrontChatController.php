@@ -161,7 +161,7 @@ class FrontChatController extends AbstractController
             $groupeName = $groupeName['name'];
             $newGroup->addUserToGroups($user[0]);
             $newGroup->setCreatedAt(new DateTimeImmutable());
-            $newGroup->setUpdateAt(new DateTime());
+            $newGroup->setUpdatedAt(new DateTime());
             $this->entityManager->persist($newGroup);
             $this->entityManager->flush();
             return new JsonResponse(
@@ -227,7 +227,7 @@ class FrontChatController extends AbstractController
             $groupeName = $request->get('form_new_group_add');
             $groupeName = $groupeName['Name'];
             $newGroup->setCreatedAt(new DateTimeImmutable());
-            $newGroup->setUpdateAt(new DateTime());
+            $newGroup->setUpdatedAt(new DateTime());
             $this->entityManager->persist($newGroup);
             $this->entityManager->flush();
             return new JsonResponse(

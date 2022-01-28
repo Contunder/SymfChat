@@ -7,7 +7,7 @@
         <div class="dropup border border-dark rounded notification w-200">
             <a type="button" class="d-flex w-200 p-1 justify-content-center align-items-center btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="d-flex align-items-end">
-                    <h5 class="fs-xs m-2">{{ user[0].Lastname }} {{ user[0].Name }}</h5>
+                    <h5 class="fs-xs m-2">{{ user[0].Lastname }} {{ user[0].Firstname }}</h5>
                 </div>
             </a>
 
@@ -18,7 +18,7 @@
                             <div class="w-125 element-survole" data-group-id="{{ group.id }}">
                                 {{ group.Name }}<br>
                                 <small>
-                                    {{ group.UpdateAt|format_datetime('short', 'short', locale='fr') }}
+                                    {{ group.UpdatedAt|format_datetime('short', 'short', locale='fr') }}
                                 </small>
                             </div>
                             <div class="ml-5">
@@ -68,9 +68,9 @@
     <script src="{{ asset('assets/js/frontChat.js') }}"></script>
     <script src="{{ asset('assets/js/frontGroup.js') }}"></script>
     <script>
-        frontGroup.init({{ user[0].id }},"{{ user[0].Name }}", "{{ user[0].Lastname }}");
+        frontGroup.init({{ user[0].id }},"{{ user[0].Firstname }}", "{{ user[0].Lastname }}");
         frontGroup.initGroup();
-        frontChat.init({{ user[0].id }},"{{ user[0].Name }}", "{{ user[0].Lastname }}");
+        frontChat.init({{ user[0].id }},"{{ user[0].Firstname }}", "{{ user[0].Lastname }}");
         frontChat.initWebSocket();
         frontChat.clone();
         frontChat.initForm();

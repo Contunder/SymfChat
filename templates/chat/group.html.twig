@@ -29,7 +29,7 @@
         {{ form_end(formGroup) }}
     </div>
     <script>
-        $(".chosen-1.8.7-select").chosen({value: "Select"});
+        $(".chosen-select").chosen({value: "Select"});
     </script>
     {% block modal %}
         {{ render(controller( 'App\\Controller\\FrontChatController::chatApp' )) }}
