@@ -10,10 +10,15 @@
             <div class="d-flex align-items-center">
                 <img src="{{ user.pp }}" class="w-25 rounded-circle" alt="User Img"/>
                 <h3 class="fs-xs m-2"><b>{{ user.Username }}</b><br>
-                    {{ user.Lastname }}
-                    {{ user.Firstname }}</h3>
+                    {{ user.Lastname }} {{ user.Firstname }}<br>
+                    {% if (lastSeen == "Active") %}
+                        <div class="online"></div>
+                    {% else %}
+                        <small>Vu il y a {{ lastSeen }}</small>
+                    {% endif %}
+                </h3>
             </div>
-            <a href="{{ path('security_logout') }}" class="btn btn-dark">Déconnection</a>
+            <a href="{{ path('security_logout') }}" class="btn btn-dark">Déconnection</a><br><br>
         </div>
 
         <ul id="chatList" class="list-group mvh-50 overflow-auto">

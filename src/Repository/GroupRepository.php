@@ -54,34 +54,6 @@ class GroupRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
-    /**
-     * @param int $id
-     * @return string
-     **/
-    public function lastSeen(int $id): string
-    {
 
-        $timestamp = $this->find($id)->getUpdatedAt()->getTimestamp();
-        $strTime = array("seconde(s)", "minute(s)", "heure(s)", "jour", "mois", "année");
-        $length = array("60","60","24","30","12","10");
-
-        $currentTime = time();
-        if($currentTime >= $timestamp) {
-
-            $diff = time()- $timestamp;
-
-            for($i = 0; $diff >= $length[$i] && $i < count($length)-1; $i++) {
-                $diff = $diff / $length[$i];
-            }
-
-            $diff = round($diff);
-            if ($diff < 59 && $strTime[$i] == "second") {
-                return 'Active';
-            }else {
-                return $diff . " " . $strTime[$i] ;
-            }
-        }
-        return '';
-    }
 
 }

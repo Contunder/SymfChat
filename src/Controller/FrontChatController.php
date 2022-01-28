@@ -7,6 +7,7 @@ use App\Entity\Group;
 use App\Entity\Message;
 use App\Form\GroupType;
 use App\Form\UploadType;
+use App\Service\Activity;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,7 +58,7 @@ class FrontChatController extends AbstractController
     /**
      * @Route("/chat/front/render", name="chat_front_render")
      */
-    public function jsRender(Request $request): Response
+    public function jsRender(Request $request, Activity $activity): Response
     {
         if (!empty($request->get("groupId"))) {
             $id = $request->get("groupId");
@@ -74,7 +75,7 @@ class FrontChatController extends AbstractController
             $messages = $messageRepo->messagesOfGroup($group);
 
             # SAVOIR SI LA CONVERSATIONS EST ACTIVE OU NON
-            $lastSeen = $groupRepo->lastSeen($id);
+            $lastSeen = $activity->lastSeen($group[0]->getUpdatedAt());
 
             // Création pour uploader un fichier
             $uploadType = new UploadType();
@@ -221,7 +222,6 @@ class FrontChatController extends AbstractController
         $newGroup = new Group();
         $groupType = new GroupType();
         $form = $this->formFactory->createNamedBuilder($groupType->getBlockPrefix() . 'update', GroupType::class, $newGroup, ['id' => $user[0]->getId()])->getForm();
-        //$form ->
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $groupeName = $request->get('form_new_group_add');

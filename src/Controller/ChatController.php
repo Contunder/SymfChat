@@ -8,6 +8,7 @@ use App\Entity\Group;
 use App\Entity\User;
 use App\Form\GroupType;
 use App\Form\UploadType;
+use App\Service\Activity;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -65,16 +66,19 @@ class ChatController extends AbstractController
     /**
      * @Route("/home", name="home")
      */
-    public function index(): Response
+    public function index(Activity $activity): Response
     {
         # RECUPERE LES INFOS DES CONVERSATIONS DE L'UTILISATEUR
         $groupRepo = $this->doctrine->getRepository(Group::class);
         $groups = $groupRepo->groupsOfUser($this->getUser()->getUserIdentifier());
+        $lastSeen = $activity->lastSeen($this->getUser()->getUpdatedAt());
+
 
         return $this->render('chat/home.html.twig', [
             'controller_name' => 'ChatController',
             'user' => $this->getUser(),
             'groups' => $groups,
+            'lastSeen' => $lastSeen,
         ]);
     }
 
@@ -82,7 +86,7 @@ class ChatController extends AbstractController
     /**
      * @Route("/chat/{id}", name="chat")
      */
-    public function chat($id): Response
+    public function chat($id, Activity $activity): Response
     {
         $userRepo = $this->doctrine->getRepository(User::class);
         $groupRepo = $this->doctrine->getRepository(Group::class);
@@ -96,7 +100,7 @@ class ChatController extends AbstractController
         $messages = $messageRepo->messagesOfGroup($group);
 
         # SAVOIR SI LA CONVERSATIONS EST ACTIVE OU NON
-        $lastSeen = $groupRepo->lastSeen($id);
+        $lastSeen = $activity->lastSeen($group[0]->getUpdatedAt());
 
         // Création pour uploader un fichier
         $uploadType = new UploadType();
