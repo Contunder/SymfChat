@@ -152,7 +152,7 @@ let frontChat = (function () {
         });
 
         //ECOUTE DE L'INPUT DE FICHIER
-        body.on('change', "input.form_upload_file", function () {
+        body.on('change', "input.form_upload_file", function (e) {
              let inputFile = $(this),
                  form = inputFile.closest('form'),
                  groupId = form.attr('data-group'),
@@ -170,6 +170,7 @@ let frontChat = (function () {
                 }
             }
         });
+        window.addEventListener("drop", handleDrop, false);
 
         // ECOUTE LE BOUTON POUR FERMER LA FENETRE
         body.on('click', '.close', function () {
@@ -188,10 +189,31 @@ let frontChat = (function () {
         setTimeout(chatBox.scrollTop = chatBox.scrollHeight, 1000);
     }
 
+    // RECUPERE LES FICHIERS DANS LA DROP ZONE
+    function handleDrop(e) {
+        e.preventDefault();
+        let inputFile = $("input.form_upload_file"),
+            form = inputFile.closest('form'),
+            groupId = form.attr('data-group'),
+            url = form.attr('action');
+
+
+        let dt = e.dataTransfer,
+            files = dt.files;
+
+        if(files.length > 0){
+            for(let i=0;i<files.length;i++){
+                sendFile(files[i], groupId, url, form);
+            }
+        }
+
+    }
+
     // ENVOIE LES FICHIER A PHP ET RENVOIE LA REPONSE AU WEBSOCKET AINSI QU'A L'UTILISATEUR ACTUELLE
     function sendFile(file, groupId, url, jqueryForm) {
         let form = jqueryForm[0],
             data = new FormData(form);
+            data.append('file', file);
         $.ajax({
             xhr: function() {
                 let xhr = new window.XMLHttpRequest();
@@ -215,12 +237,12 @@ let frontChat = (function () {
                 $(".progress-bar").width('0%');
             },
             error:function(){
-                document.getElementById("ChatInfo" + groupId).innerHTML ='';
+                document.getElementById("ChatInfo" + groupId).innerHTML='';
                 alert('Problème lors du transfert :\nFichier accepté : Documents Texte, Images, Archives\nMax : 50Mo');
             },
             success: function (php_script_response) {
                 if (php_script_response.fileSuccess === true) {
-                    document.getElementById("ChatInfo" + groupId).innerHTML ='';
+                    document.getElementById("ChatInfo" + groupId).innerHTML='';
                     const message = {
                         messUserId: userId,
                         messGroupId: groupId,
@@ -254,7 +276,7 @@ let frontChat = (function () {
             document.getElementById("ChatInfo" + messGroupId).innerHTML = "";
             if (messUserId === userId) {
                 if (message.substring(0, 5) === 'file:') {
-                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg') {
+                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg' || message.substring(message.lastIndexOf('.') + 1) === 'gif') {
                         userMessagePrime.id = messNumber;
                         const messageHTML ="<img src='" + message.substring(5) + "' class='rtext' alt='Size "+ messSize +"'/>";
                         document.getElementById("chatBox" + messGroupId).appendChild(userMessagePrime).innerHTML = messageHTML;
@@ -272,7 +294,7 @@ let frontChat = (function () {
                 }
             } else {
                 if (message.substring(0, 5) === 'file:') {
-                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg') {
+                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg' || message.substring(message.lastIndexOf('.') + 1) === 'gif') {
                         messagePrime.id = messNumber;
                         const messageHTML = "<img src='" + message.substring(5) + "' class='ltext' alt='Size "+ messSize +" />";
                         document.getElementById("chatBox" + messGroupId).appendChild(messagePrime).innerHTML = messageHTML;
