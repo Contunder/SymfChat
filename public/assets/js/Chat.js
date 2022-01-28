@@ -4,6 +4,7 @@ let Chat = (function () {
     let Conversation;
     let UserName;
     let UserLastname;
+    let socket;
     let Route = "https://127.0.0.1:8000/";
 
     // PARAMETRE DU SCRIPT
@@ -40,7 +41,7 @@ let Chat = (function () {
     function initWebSocket() {
 
         // CONNEXION AU WEBSOCKET A L'OUVERTURE DE LA PAGE
-        const socket = new WebSocket("ws://127.0.0.1:3001");
+        socket = new WebSocket("ws://127.0.0.1:3001");
         socket.addEventListener('open', function () {
             console.log("CONNECTED");
         });
@@ -214,7 +215,7 @@ let Chat = (function () {
             document.getElementById("ChatInfo").innerHTML = "";
             if (messUserId === User) {
                 if (message.substring(0, 5) === 'file:') {
-                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg') {
+                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg' || message.substring(message.lastIndexOf('.') + 1) === 'gif') {
                         userMessagePrime.id = messNumber;
                         const messageHTML ="<img src='" + message.substring(5) + "' class='rtext' alt='Size "+ messSize +"'/>";
                         document.getElementById("chatBox").appendChild(userMessagePrime).innerHTML = messageHTML;
@@ -232,7 +233,7 @@ let Chat = (function () {
                 }
             } else {
                 if (message.substring(0, 5) === 'file:') {
-                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg') {
+                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg' || message.substring(message.lastIndexOf('.') + 1) === 'gif') {
                         messagePrime.id = messNumber;
                         const messageHTML = "<img src='" + message.substring(5) + "' class='ltext' alt='Size "+ messSize +" />";
                         document.getElementById("chatBox").appendChild(messagePrime).innerHTML = messageHTML;

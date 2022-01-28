@@ -125,14 +125,14 @@ class ChatController extends AbstractController
 
         $uploadType = new UploadType();
         $uploadForm = $this->formFactory->createNamedBuilder($uploadType->getBlockPrefix() . 'add', UploadType::class)->getForm();
-        $file = $request->files->get('form_upload_add');
-        $filename = $file['file']->getClientOriginalName();
-        $size = $file['file']->getSize();
+        $file = $request->files->get('file');
+        $filename = $file->getClientOriginalName();
+        $size = $file->getSize();
         $uploadForm->handleRequest($request);
         if ($uploadForm->isSubmitted() && $uploadForm->isValid()) {
             $uploadDirectory = 'upload/files/';
-            $newFilename = substr($filename,0,-4).'_'.$this->getUser()->getUserIdentifier().'.'.$file['file']->guessExtension();
-            $file['file']->move($uploadDirectory,$newFilename);
+            $newFilename = substr($filename,0,-4).'_'.$this->getUser()->getUserIdentifier().'.'.$file->guessExtension();
+            $file->move($uploadDirectory,$newFilename);
             $newFileDirectory = 'file:'.$uploadDirectory.$newFilename;
             return new JsonResponse(
                 [
