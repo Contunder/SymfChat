@@ -1,0 +1,25 @@
+{% if result > 0 %}
+    {% for i in 0..c %}
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+
+                    <img src="{{ result[i].pp }}" class="w-10 rounded-circle">
+
+                    <h3 class="fs-xs m-2">
+                        {{ result[i].Firstname }}
+                        {{ result[i].Lastname }}<br>
+                        {% if (lastSeen[i] == "Active") %}
+                            <div class="d-flex align-items-center align-content-center"><div class="online mr-1"></div><small>En Ligne</small></div>
+                        {% else %}
+                            <small>Vu il y a {{ lastSeen[i] }}</small>
+                        {% endif %}
+                    </h3>
+                </div>
+            </li>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info text-center">
+        <i class="fa fa-user-times d-block fs-big"></i>
+        L'utilisateur n'est pas trouvé.
+    </div>
+{% endif %}<br>

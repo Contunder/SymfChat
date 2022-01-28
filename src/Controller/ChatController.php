@@ -82,6 +82,32 @@ class ChatController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/search", name="search")
+     */
+    public function search(Request $request, Activity $activity): Response
+    {
+        # RECUPERE LES INFOS DES CONVERSATIONS DE L'UTILISATEUR
+        $userRepo = $this->doctrine->getRepository(User::class);
+        $search = $request->get("key");
+        if ($search != ''){
+            $results = $userRepo->search($search);
+            $c = count($results)-1;
+            $lastSeens = [];
+            foreach ($results as $result) {
+                $allLastSeen[0] = $activity->lastSeen($result->getUpdatedAt());
+                array_push($lastSeens, $allLastSeen[0]);
+            }
+
+            return $this->render('chat/search.html.twig', [
+                'result' => $results,
+                'lastSeen' => $lastSeens,
+                'c'=>$c,
+            ]);
+        }
+        return 0;
+    }
+
 
     /**
      * @Route("/chat/{id}", name="chat")

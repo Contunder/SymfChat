@@ -45,6 +45,21 @@ class UserRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
+    /**
+     * Search vaults
+     * @param string $search
+     * @return array
+     */
+    public function search(string $search): array
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->where($qb->expr()->like('u.firstname', $qb->expr()->literal('%' . $search . '%')))
+           ->orWhere($qb->expr()->like('u.lastname', $qb->expr()->literal('%' . $search . '%')));
+
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
