@@ -25,7 +25,7 @@
             </div>
 
             <h3 class="fs-xs m-2">
-                {{ conversation[0].name }}
+                {{ group[0].name }}
                 <div class="d-flex align-items-center" title="online">
                     {% if (lastSeen == "Active") %}
                         <div class="online"></div>
@@ -42,39 +42,39 @@
         </div>
 
         <div class="shadow p-4 h-60 rounded d-flex flex-column mt-2 chat-box" id="chatBox">
-            {% if chats %}
-                {% for Chat in chats %}
+            {% if messages %}
+                {% for message in messages %}
                     {% if chat.AppUser == User %}
 
                         <p class="rtext align-self-end border rounded p-2 mb-1 a">
-                            {% if(chat.Message|slice(0, 4) == 'img:' ) %}
-                                <img src="{{ asset(chat.Message|slice(4))}}" class="rtext"/>
-                            {% elseif (Chat.Message|slice(0, 5) == 'file:')%}
-                                <a href="{{ asset(chat.Message|slice(5))}}" download='' class='a'>Télécharger <i class='fas fa-download'></i></a>
+                            {% if(message.Message|slice(0, 4) == 'img:' ) %}
+                                <img src="{{ asset(message.Message|slice(4))}}" class="rtext"/>
+                            {% elseif (message.Message|slice(0, 5) == 'file:')%}
+                                <a href="{{ asset(message.Message|slice(5))}}" download='' class='a'>Télécharger <i class='fas fa-download'></i></a>
                             {% else %}
-                                {{ Chat.Message }}
+                                {{ message.Message }}
                             {% endif %}
                             <small class="d-block">
                                 <b>{{ user.Name }} {{ user.Lastname }}</b>
                                 <br>
-                                {{ chat.CreatedAt|format_datetime('short', 'short', locale='fr') }}
+                                {{ message.CreatedAt|format_datetime('short', 'short', locale='fr') }}
                             </small>
                         </p>
 
                     {% else %}
 
                         <p class="ltext align-self-start border rounded p-2 mb-1">
-                            {% if(chat.Message|slice(0, 4) == 'img:' ) %}
-                                <img src="{{ asset(chat.Message|slice(4))}}" class="ltext"/>
-                            {% elseif (chat.Message|slice(0, 5) == 'file:')%}
-                                <a href="{{ asset(chat.Message|slice(5))}}" download='' class='a'>Télécharger <i class='fas fa-download'></i></a>
+                            {% if(message.Message|slice(0, 4) == 'img:' ) %}
+                                <img src="{{ asset(message.Message|slice(4))}}" class="ltext"/>
+                            {% elseif (message.Message|slice(0, 5) == 'file:')%}
+                                <a href="{{ asset(message.Message|slice(5))}}" download='' class='a'>Télécharger <i class='fas fa-download'></i></a>
                             {% else %}
-                                {{ chat.Message }}
+                                {{ message.Message }}
                             {% endif %}
                             <small class="d-block">
-                                <b>{{ chat.AppUser.Name }} {{ chat.AppUser.Lastname }}</b>
+                                <b>{{ message.AppUser.Name }} {{ message.AppUser.Lastname }}</b>
                                 <br>
-                                {{ chat.CreatedAt|format_datetime('short', 'short', locale='fr') }}
+                                {{ message.CreatedAt|format_datetime('short', 'short', locale='fr') }}
                             </small>
                         </p>
 
@@ -100,7 +100,7 @@
     {% block javascripts %}
         <script src="{{ asset('assets/js/Chat.js') }}"></script>
         <script>
-            Chat.init({{ user.id }}, {{ conversation[0].id }}, "{{ user.Name }}", "{{ user.Lastname }}");
+            Chat.init({{ user.id }}, {{ group[0].id }}, "{{ user.Name }}", "{{ user.Lastname }}");
         </script>
     {% endblock javascripts%}
 

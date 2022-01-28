@@ -57,9 +57,8 @@ class ChatController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('chat/conversation.html.twig', [
-            'controller_name' => 'ChatController',
-            'formConversation' => $form->createView(),
+        return $this->render('chat/group.html.twig', [
+            'formGroup' => $form->createView(),
         ]);
     }
 
@@ -75,7 +74,7 @@ class ChatController extends AbstractController
         return $this->render('chat/home.html.twig', [
             'controller_name' => 'ChatController',
             'user' => $this->getUser(),
-            'conversations' => $groups,
+            'groups' => $groups,
         ]);
     }
 
@@ -91,8 +90,9 @@ class ChatController extends AbstractController
 
 
         # RÉCUPERE LES UTILISATEURS DE LA CONVERSATION + LA CONV + MET A JOUR LA DATE D'ACTIVITE + LES MESSAGES DE LA CONV
-        $userInConv = $userRepo->UserInGroup($this->getUser());
-        $group = $groupRepo->oneGroup($groupRepo->find($id));
+        $user = $userRepo->user($this->getUser()->getUserIdentifier());
+        $userInConv = $userRepo->userInGroup($user[0]->getId());
+        $group = $groupRepo->oneGroup($id);
         $messages = $messageRepo->messagesOfGroup($group);
 
         # SAVOIR SI LA CONVERSATIONS EST ACTIVE OU NON
@@ -107,8 +107,8 @@ class ChatController extends AbstractController
             'controller_name' => 'ChatController',
             'user' => $this->getUser(),
             'userInConv' => $userInConv,
-            'conversation' => $group,
-            'chats' => $messages,
+            'group' => $group,
+            'messages' => $messages,
             'lastSeen' => $lastSeen,
             'uploadForm' => $uploadForm->createView()
         ]);
