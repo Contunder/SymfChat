@@ -116,7 +116,7 @@ class FrontChatController extends AbstractController
         $size = $file['file']->getSize();
         $uploadForm->handleRequest($request);
         if ($uploadForm->isSubmitted() && $uploadForm->isValid()) {
-            $uploadDirectory = 'upload/chat/';
+            $uploadDirectory = 'upload/files/';
             $newFilename = substr($filename,0,-4).'_'.$this->getUser()->getUserIdentifier().'.'.$file['file']->guessExtension();
             $file['file']->move($uploadDirectory,$newFilename);
             $newFileDirectory = 'file:'.$uploadDirectory.$newFilename;

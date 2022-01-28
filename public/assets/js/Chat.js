@@ -14,6 +14,19 @@ let Chat = (function () {
         UserLastname = ParamUserLastname;
     }
 
+    let userMessagePrime;
+    let messagePrime;
+    let userNamePrime;
+    let navBarPrime;
+    let messNumber = 0;
+    function clone(){
+        userMessagePrime = document.getElementById('user-message').cloneNode(true);
+        messagePrime = document.getElementById('message').cloneNode(true);
+        userNamePrime = document.getElementById('user-name').cloneNode(true);
+        navBarPrime = document.getElementById('progress').cloneNode(true);
+        messNumber++;
+    }
+
     // FONCTION POUR AUTOSCOLL A L'AJOUT D'UN MESSAGE
     const scrollDown = function () {
         let chatBox = document.getElementById('chatBox');
@@ -21,147 +34,101 @@ let Chat = (function () {
     }
     scrollDown();
 
-    // MESSAGE D'UN UTILISATEUR
-    // RENVOIE LA REPONSE AU WEBSOCKET AINSI QU'A L'UTILISATEUR ACTUELLE
-    const sendMessage = function () {
-        const message = {
-            UserId: User,
-            ConversationId: Conversation,
-            UserName: UserName,
-            UserLastname: UserLastname,
-            Message: document.getElementById("Message").value
-        };
-        socket.send(JSON.stringify(message));
-        addMessage(message.UserId, message.ConversationId, message.Message, message.UserName, message.UserLastname);
-        scrollDown();
-    }
+    let sendMessage;
+    let writeMessage;
+    let deleteMessage;
+    function initWebSocket() {
 
-    // MESSAGE QUAND UN UTILISATEUR ECRIT UN MESSAGE
-    // RENVOIE LA REPONSE AU WEBSOCKET
-    const writeMessage = function () {
-        const message = {
-            UserId: User,
-            ConversationId: Conversation,
-            UserName: UserName,
-            UserLastname: UserLastname,
-            Message: "..."
-        };
-        socket.send(JSON.stringify(message));
-    }
+        // CONNEXION AU WEBSOCKET A L'OUVERTURE DE LA PAGE
+        const socket = new WebSocket("ws://127.0.0.1:3001");
+        socket.addEventListener('open', function () {
+            console.log("CONNECTED");
+        });
 
-    // MESSAGE QUAND UN UTILISATEUR ANNULE SONT MESSAGE
-    // RENVOIE LA REPONSE AU WEBSOCKET AINSI QU'A L'UTILISATEUR ACTUELLE
-    const deleteMessage = function () {
-        const message = {
+        // ECOUTE LE WEBSOCKET POUR TRAITER LES MESSAGES RECU PAR UN AUTRE UTILISATEUR SEULEMENT
+        socket.addEventListener("message", function (e) {
+            try {
+                const message = JSON.parse(e.data);
+                addMessage(message.UserId, message.ConversationId, message.Message, message.UserName, message.UserLastname);
+                scrollDown();
+            } catch (e) {
+                // Catch any errors
+            }
+        });
+
+        // MESSAGE D'UN UTILISATEUR
+        // RENVOIE LA REPONSE AU WEBSOCKET AINSI QU'A L'UTILISATEUR ACTUELLE
+        sendMessage = function () {
+            const message = {
                 UserId: User,
                 ConversationId: Conversation,
                 UserName: UserName,
                 UserLastname: UserLastname,
-                Message: "delete"
-            }
-        ;
-        socket.send(JSON.stringify(message));
-    }
-
-    // CONNEXION AU WEBSOCKET A L'OUVERTURE DE LA PAGE
-    const socket = new WebSocket("ws://127.0.0.1:3001");
-    socket.addEventListener('open', function () {
-        console.log("CONNECTED");
-    });
-
-    // TRIE POUR AJOUTER LES MESSAGES
-    // AUTRE QUE L'UTILISATEUR ACTUELLE (UTILISATEUR QUI ECRIT, UTILISATEUR QUI EFFACE)
-    // UTILISATEUR ACTUELLE (FICHIER IMAGE, FICHIER, MESSAGE)
-    // AUTRE QUE L'UTILISATEUR ACTUELLE (FICHIER IMAGE, FICHIER, MESSAGE)
-    function addMessage(UserId, ConversationId, Message, UserName, UserLastname) {
-        if (ConversationId === Conversation) {
-            const endMessage = "<small class='d-block'><b>" + UserName + " " + UserLastname + "</b></small></p>";
-            if (Message === '...' && UserId !== User) {
-                const messageHTML = "<small class='text-lg-end mt-0 d-block'><b>"
-                    + UserName + " " + UserLastname +
-                    " est en train d'écrire...</b></small>";
-                document.getElementById("ChatInfo").innerHTML = messageHTML;
-            } else if (Message === 'delete' || Message === '...') {
-                document.getElementById("ChatInfo").innerHTML = "";
-            } else {
-                document.getElementById("ChatInfo").innerHTML = "";
-                if (UserId === User) {
-                    if (Message.substring(0, 5) === 'file:') {
-                        if (Message.substring(Message.lastIndexOf('.') + 1) === 'jpg' || Message.substring(Message.lastIndexOf('.') + 1) === 'png' || Message.substring(Message.lastIndexOf('.') + 1) === 'jpeg') {
-                            const messageHTML = "<p class='rtext align-self-end border rounded p-2 mb-1'>" +
-                                "<img src='" + Route + Message.substring(5) + "' class='rtext' />" + endMessage;
-                                document.getElementById("chatBox").innerHTML += messageHTML;
-                            //javascript:window.location.reload();
-                        } else {
-                            const messageHTML = "<p class='rtext align-self-end border rounded p-2 mb-1'>" +
-                                "<a href='" + Route + Message.substring(5) + "' download='' class='a'>Télécharger <i class='fas fa-download'></i></a>" + endMessage;
-                            document.getElementById("chatBox").innerHTML += messageHTML;
-                            //javascript:window.location.reload();
-                        }
-                    } else {
-                        const messageHTML = "<p class='rtext align-self-end border rounded p-2 mb-1'>" + Message + endMessage;
-                        document.getElementById("chatBox").innerHTML += messageHTML
-                    }
-                } else {
-                    if (Message.substring(0, 5) === 'file:') {
-                        if (Message.substring(Message.lastIndexOf('.') + 1) === 'jpg' || Message.substring(Message.lastIndexOf('.') + 1) === 'png' || Message.substring(Message.lastIndexOf('.') + 1) === 'jpeg') {
-                            const messageHTML = "<p class='ltext align-self-start border rounded p-2 mb-1'>" +
-                                "<img src='" + Route + Message.substring(5) + "' class='ltext' />" + endMessage;
-                            document.getElementById("chatBox").innerHTML += messageHTML;
-                            //javascript:window.location.reload();
-                        } else {
-                            const messageHTML = "<p class='ltext align-self-start border rounded p-2 mb-1'>" +
-                                "<a href='" + Route + Message.substring(5) + "' download='' class='a'>Télécharger <i class='fas fa-download'></i></a>" + endMessage;
-                            document.getElementById("chatBox").innerHTML += messageHTML;
-                            //javascript:window.location.reload();
-                        }
-                    } else {
-                        const messageHTML = "<p class='ltext align-self-start border rounded p-2 mb-1'>" + Message + endMessage;
-                        document.getElementById("chatBox").innerHTML += messageHTML
-                    }
-                }
-                scrollDown();
-            }
-        }
-
-    }
-
-    // ECOUTE LE WEBSOCKET POUR TRAITER LES MESSAGES RECU PAR UN AUTRE UTILISATEUR SEULEMENT
-    socket.addEventListener("message", function (e) {
-        try {
-            const message = JSON.parse(e.data);
+                Message: document.getElementById("Message").value
+            };
+            socket.send(JSON.stringify(message));
             addMessage(message.UserId, message.ConversationId, message.Message, message.UserName, message.UserLastname);
             scrollDown();
-        } catch (e) {
-            // Catch any errors
         }
-    });
 
-    // ECOUTE LE BOUTON POUR TRAITER LES MESSAGE
-    document.getElementById("sendBtn").addEventListener("click", function () {
-        sendMessage();
-        document.getElementById("Message").value = ""
-    });
+        // MESSAGE QUAND UN UTILISATEUR ECRIT UN MESSAGE
+        // RENVOIE LA REPONSE AU WEBSOCKET
+        writeMessage = function () {
+            const message = {
+                UserId: User,
+                ConversationId: Conversation,
+                UserName: UserName,
+                UserLastname: UserLastname,
+                Message: "..."
+            };
+            socket.send(JSON.stringify(message));
+        }
 
-    // ECOUTE LA TEXTAREA POUR TRAITER LES MESSAGE
-    document.getElementById("Message").addEventListener("keyup", function (event) {
-        if (event.key === "Enter") {
+        // MESSAGE QUAND UN UTILISATEUR ANNULE SONT MESSAGE
+        // RENVOIE LA REPONSE AU WEBSOCKET AINSI QU'A L'UTILISATEUR ACTUELLE
+        deleteMessage = function () {
+            const message = {
+                    UserId: User,
+                    ConversationId: Conversation,
+                    UserName: UserName,
+                    UserLastname: UserLastname,
+                    Message: "delete"
+                }
+            ;
+            socket.send(JSON.stringify(message));
+        }
+
+    }
+
+    function initForm() {
+
+        // ECOUTE LE BOUTON POUR TRAITER LES MESSAGE
+        document.getElementById("sendBtn").addEventListener("click", function () {
             sendMessage();
             document.getElementById("Message").value = ""
-        } else if (event.key === "Backspace") {
-            deleteMessage();
-        } else {
-            writeMessage();
-        }
+        });
 
-    });
+        // ECOUTE LA TEXTAREA POUR TRAITER LES MESSAGE
+        document.getElementById("Message").addEventListener("keyup", function (event) {
+            if (event.key === "Enter") {
+                sendMessage();
+                document.getElementById("Message").value = ""
+            } else if (event.key === "Backspace") {
+                deleteMessage();
+            } else {
+                writeMessage();
+            }
 
-    // ECOUTE LES CHANGEMENTS DE L'INPUT FILE OU DE LA DROP ZONE
-    document.getElementById("form_upload_add_file").addEventListener("change", function () {
-        const files_data = $('#form_upload_add_file').prop('files');
-        handleFiles(files_data)
-    }, false)
-    window.addEventListener("drop", handleDrop, false);
+        });
+
+        // ECOUTE LES CHANGEMENTS DE L'INPUT FILE OU DE LA DROP ZONE
+        document.getElementById("form_upload_add_file").addEventListener("change", function () {
+            const files_data = $('#form_upload_add_file').prop('files');
+            handleFiles(files_data)
+        }, false)
+        window.addEventListener("drop", handleDrop, false);
+
+    }
 
     // RECUPERE LES FICHIERS DANS LA DROP ZONE
     function handleDrop(e) {
@@ -233,8 +200,65 @@ let Chat = (function () {
         });
     }
 
+    // TRIE POUR AJOUTER LES MESSAGES
+    // AUTRE QUE L'UTILISATEUR ACTUELLE (UTILISATEUR QUI ECRIT, UTILISATEUR QUI EFFACE)
+    // UTILISATEUR ACTUELLE (FICHIER IMAGE, FICHIER, MESSAGE)
+    // AUTRE QUE L'UTILISATEUR ACTUELLE (FICHIER IMAGE, FICHIER, MESSAGE)
+    function addMessage(messUserId, messGroupId, message, messUserName, messUserLastname, messFilename, messSize) {
+        if (message === '...' && messUserId !== User) {
+            const messageHTML = messUserName + " " + messUserLastname + " est en train d'écrire...";
+            document.getElementById("ChatInfo").innerHTML = messageHTML;
+        } else if (message === 'delete' || message === '...') {
+            document.getElementById("ChatInfo").innerHTML = "";
+        } else {
+            document.getElementById("ChatInfo").innerHTML = "";
+            if (messUserId === User) {
+                if (message.substring(0, 5) === 'file:') {
+                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg') {
+                        userMessagePrime.id = messNumber;
+                        const messageHTML ="<img src='" + message.substring(5) + "' class='rtext' alt='Size "+ messSize +"'/>";
+                        document.getElementById("chatBox").appendChild(userMessagePrime).innerHTML = messageHTML;
+                        document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
+                    } else {
+                        userMessagePrime.id = messNumber;
+                        const messageHTML = "<a href='" + message.substring(5) + "' download='' class='a' >Télécharger <i class='fas fa-download'></i><br>"+messFilename+"<br>"+messSize+" octet</a>";
+                        document.getElementById("chatBox").appendChild(userMessagePrime).innerHTML = messageHTML;
+                        document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
+                    }
+                } else {
+                    userMessagePrime.id = messNumber;
+                    document.getElementById("chatBox").appendChild(userMessagePrime).innerHTML = message;
+                    document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
+                }
+            } else {
+                if (message.substring(0, 5) === 'file:') {
+                    if (message.substring(message.lastIndexOf('.') + 1) === 'jpg' || message.substring(message.lastIndexOf('.') + 1) === 'png' || message.substring(message.lastIndexOf('.') + 1) === 'jpeg') {
+                        messagePrime.id = messNumber;
+                        const messageHTML = "<img src='" + message.substring(5) + "' class='ltext' alt='Size "+ messSize +" />";
+                        document.getElementById("chatBox").appendChild(messagePrime).innerHTML = messageHTML;
+                        document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
+                    } else {
+                        messagePrime.id = messNumber;
+                        const messageHTML = "<a href='" + message.substring(5) + "' download='' class='a' >Télécharger <i class='fas fa-download'></i><br>"+messFilename+"<br>"+messSize+" octet</a>";
+                        document.getElementById("chatBox").appendChild(messagePrime).innerHTML = messageHTML;
+                        document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
+                    }
+                } else {
+                    messagePrime.id = messNumber;
+                    document.getElementById("chatBox").appendChild(messagePrime).innerHTML = message;
+                    document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
+                }
+            }
+            clone();
+            scrollDown(messGroupId);
+        }
+    }
+
     return {
-        init: init
+        init: init,
+        initWebSocket: initWebSocket,
+        initForm: initForm,
+        clone: clone,
     }
 
 }());

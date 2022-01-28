@@ -34,7 +34,7 @@ class GroupType extends AbstractType
                 [
                     'label' => 'Utilisateurs',
                     'multiple' => true,
-                    'attr'=>['class' => 'form-control chosen-select',
+                    'attr'=>['class' => 'form-control chosen-1.8.7-select',
                              'data-placeholder' => '---------------- Sélection des Utilisateurs ----------------'],
                     'placeholder' => '-- Sélection --',
                     'class' => User::class,
