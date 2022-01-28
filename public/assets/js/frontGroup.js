@@ -49,7 +49,7 @@ let frontGroup = (function () {
     }
 
     function newGroup() {
-        let url = "/intranet/tool/chat/group";
+        let url = "/chat/front/group";
         let data = new FormData();
         $.ajax({
             url: url,
@@ -75,7 +75,7 @@ let frontGroup = (function () {
         let form = jqueryForm[0],
             data = new FormData(form);
         $.ajax({
-            url: '/intranet/tool/chat/group',
+            url: '/chat/front/group',
             type: "POST",
             data: data,
             processData: false,
@@ -99,7 +99,7 @@ let frontGroup = (function () {
     }
 
     function editGroup(id) {
-        let url = "/intranet/tool/chat/update/group/"+id;
+        let url = "/chat/front/update/group/"+id;
         let data = new FormData();
         $.ajax({
             url: url,
@@ -121,7 +121,7 @@ let frontGroup = (function () {
     }
 
     function deleteGroup(id) {
-        let url = "/intranet/tool/chat/delete/group/"+id;
+        let url = "/chat/front/delete/group/"+id;
         console.log(url);
         let data = new FormData();
         $.ajax({

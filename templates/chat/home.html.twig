@@ -46,5 +46,8 @@
         </div>
 
     </div>
+    {% block modal %}
+        {{ render(controller( 'App\\Controller\\FrontChatController::chatApp' )) }}
+    {% endblock %}
 </body>
 {% endblock %}

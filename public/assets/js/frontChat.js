@@ -33,7 +33,7 @@ let frontChat = (function () {
     }
 
     function sendConv(groupId) {
-        let url = "/intranet/tool/chat/render";
+        let url = "/chat/font/render";
         let data = new FormData();
         data.append('convId', groupId);
         $.ajax({

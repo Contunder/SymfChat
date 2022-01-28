@@ -31,5 +31,8 @@
     <script>
         $(".chosen-select").chosen({value: "Select"});
     </script>
+    {% block modal %}
+        {{ render(controller( 'App\\Controller\\FrontChatController::chatApp' )) }}
+    {% endblock %}
 </body>
 {% endblock %}
