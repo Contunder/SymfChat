@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <base href="{{ app.request.getSchemeAndHttpHost() }}">
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="icon" href="{{ asset('assets/img/logo.png') }}">
     {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
@@ -17,7 +18,8 @@
         {{ encore_entry_script_tags('app') }}
         <script src="{{ asset('assets/library/jquery-3.6.0.min.js') }}"></script>
         <script src="{{ asset('assets/library/chosen.jquery.min.js') }}"></script>
-        <script src="{{ asset('assets/library/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('assets/library/popper.min.js') }}"></script>
+        <script src="{{ asset('assets/library/bootstrap.min.js') }}"></script>
     {% endblock %}
 </head>
 <body>

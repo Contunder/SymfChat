@@ -16,10 +16,10 @@ class UserRepository extends ServiceEntityRepository
 {
     /**
      * Search vaults
-     * @param User $User_Id
+     * @param int $User_Id
      * @return array
      */
-    public function UserInGroup(User $User_Id): Array
+    public function userInGroup(int $User_Id): Array
     {
         $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.groups','c')

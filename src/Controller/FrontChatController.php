@@ -38,7 +38,7 @@ class FrontChatController extends AbstractController
     }
 
     /**
-     * @Route("/chat/font/index", name="chat_front_index")
+     * @Route("/chat/front/index", name="chat_front_index")
      */
     public function chatApp(): Response
     {
@@ -55,21 +55,21 @@ class FrontChatController extends AbstractController
     }
 
     /**
-     * @Route("/chat/font/render", name="chat_front_render")
+     * @Route("/chat/front/render", name="chat_front_render")
      */
     public function jsRender(Request $request): Response
     {
-        if (!empty($request->get("convId"))) {
-            $id = $request->get("convId");
-            $directoryRepo = $this->doctrine->getRepository(User::class);
+        if (!empty($request->get("groupId"))) {
+            $id = $request->get("groupId");
+            $userRepo = $this->doctrine->getRepository(User::class);
             $groupRepo = $this->doctrine->getRepository(Group::class);
             $messageRepo = $this->doctrine->getRepository(Message::class);
             $username = $this->getUser()->getUserIdentifier();
-            $user = $directoryRepo->user($username);
+            $user = $userRepo->user($username);
 
 
             # RÉCUPERE LES UTILISATEURS DE LA CONVERSATION + LA CONV + MET A JOUR LA DATE D'ACTIVITE + LES MESSAGES DE LA CONV
-            $userInConv = $directoryRepo->usersInGroup($user[0]->getId());
+            $userInConv = $userRepo->userInGroup($user[0]->getId());
             $group = $groupRepo->oneGroup($id);
             $messages = $messageRepo->messagesOfGroup($group);
 
@@ -105,7 +105,7 @@ class FrontChatController extends AbstractController
     }
 
     /**
-     * @Route("/chat/font/upload/{id}/", name="chat_font_upload")
+     * @Route("/chat/front/upload/{id}/", name="chat_front_upload")
      */
     public function upload(Request $request, $id): Response
     {
@@ -143,7 +143,7 @@ class FrontChatController extends AbstractController
     }
 
     /**
-     * @Route("/chat/font/group", name="chat_front_group")
+     * @Route("/chat/front/group", name="chat_front_group")
      */
     public function newGroup(Request $request)
     {
@@ -158,7 +158,7 @@ class FrontChatController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $groupeName = $request->get('form_new_group_add');
-            $groupeName = $groupeName['Name'];
+            $groupeName = $groupeName['name'];
             $newGroup->addUserToGroups($user[0]);
             $newGroup->setCreatedAt(new DateTimeImmutable());
             $newGroup->setUpdateAt(new DateTime());
@@ -186,7 +186,7 @@ class FrontChatController extends AbstractController
     }
 
     /**
-     * @Route("/chat/font/delete/group/{id}", name="chat_front_delete_group")
+     * @Route("/chat/front/delete/group/{id}", name="chat_front_delete_group")
      */
     public function deleteGroup($id)
     {
@@ -207,7 +207,7 @@ class FrontChatController extends AbstractController
     }
 
     /**
-     * @Route("/chat/font/update/group/{id}", name="chat_front_update_group")
+     * @Route("/chat/front/update/group/{id}", name="chat_front_update_group")
      */
     public function updateGroup(Request $request, $id)
     {

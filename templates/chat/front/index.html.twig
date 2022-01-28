@@ -5,9 +5,9 @@
         <div class="nav" id="Chat"></div>
 
         <div class="dropup border border-dark rounded notification w-200">
-            <a type="button" class="d-flex w-200 p-1 justify-content-center align-items-center btn dropdown-togglee" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a type="button" class="d-flex w-200 p-1 justify-content-center align-items-center btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="d-flex align-items-end">
-                    <h5 class="fs-xs m-2">{{ user[0].name }} {{ user[0].lastname }}</h5>
+                    <h5 class="fs-xs m-2">{{ user[0].Name }} {{ user[0].LastName }}</h5>
                 </div>
             </a>
 
@@ -21,7 +21,7 @@
                                     {{ group.UpdateAt|format_datetime('short', 'short', locale='fr') }}
                                 </small>
                             </div>
-                            <div class="ml-3">
+                            <div class="ml-5">
                                 <div id="delete{{ group.id }}" class="close delete" data-group-id="{{ group.id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
@@ -53,7 +53,7 @@
 
     </nav>
     </div>
-    <div id="hide" class="visually-hidden">
+    <div id="hide" style="visibility: hidden">
         <div id="copy"></div>
         <p id="user-message" class='rtext align-self-end border rounded p-2 mb-1'>
         </p>

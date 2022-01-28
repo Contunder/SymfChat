@@ -24,7 +24,7 @@ class GroupType extends AbstractType
         $builder
             ->add('name', TextType::class,
                 [
-                    'label' => 'Nom',
+                    'label' => 'name',
                     'constraints' => array(
                         new Asserts\NotBlank()
                     )

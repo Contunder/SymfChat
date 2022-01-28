@@ -62,7 +62,7 @@ let frontGroup = (function () {
                 if (php_script_response.groupSuccess === true) {
                     if (document.getElementById('newGroup') === null) {
                         document.getElementById("Chat").innerHTML += php_script_response.view;
-                        document.getElementById("form_new_group_add_DirectoryToGroups").classList.add("chosen-select");
+                        document.getElementById("form_new_group_add_user_to_groups").classList.add("chosen-select");
                     }
 
                 }
@@ -88,7 +88,7 @@ let frontGroup = (function () {
                 }else if (php_script_response.groupSuccess === true) {
                     if (document.getElementById('newGroup') === null) {
                         document.getElementById("Chat").innerHTML += php_script_response.view;
-                        document.getElementById("form_new_group_add_DirectoryToGroups").classList.add("chosen-select");
+                        document.getElementById("form_new_group_add_user_to_groups").classList.add("chosen-select");
                     }
                 }else {
                     alert('Problème lors de la création');
@@ -112,7 +112,7 @@ let frontGroup = (function () {
                 if (php_script_response.groupSuccess === true) {
                     if (document.getElementById('newGroup') === null) {
                         document.getElementById("Chat").innerHTML += php_script_response.view;
-                        document.getElementById("form_new_group_add_DirectoryToGroups").classList.add("chosen-select");
+                        document.getElementById("form_new_group_add_user_to_groups").classList.add("chosen-select");
                     }
 
                 }

@@ -33,9 +33,9 @@ let frontChat = (function () {
     }
 
     function sendConv(groupId) {
-        let url = "/chat/font/render";
+        let url = "/chat/front/render";
         let data = new FormData();
-        data.append('convId', groupId);
+        data.append('groupId', groupId);
         $.ajax({
             url: url,
             type: "POST",
@@ -230,7 +230,6 @@ let frontChat = (function () {
                         messSize: php_script_response.size,
                         messFilename: php_script_response.filename,
                     };
-                    console.log(php_script_response);
                     socket.send(JSON.stringify(message));
                     addMessage(message.messUserId, message.messGroupId, message.message, message.messUserName, message.messUserLastname, message.messFilename, message.messSize);
                 } else {

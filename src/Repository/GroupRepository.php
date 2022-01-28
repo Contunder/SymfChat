@@ -40,10 +40,10 @@ class GroupRepository extends ServiceEntityRepository
 
     /**
      * Search vaults
-     * @param Group $id
+     * @param int $id
      * @return array
      **/
-    public function oneGroup(Group $id): array
+    public function oneGroup(int $id): array
     {
         $qb = $this->createQueryBuilder('g')
             ->leftJoin('g.messages','m')

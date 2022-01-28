@@ -16,12 +16,12 @@
 
                 <div class="mb-3">
                     <label class="form-label">Nom</label>
-                    {{ form_widget(formGroup.Name) }}
+                    {{ form_widget(formGroup.name) }}
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Utilisateurs</label><br>
-                    {{ form_widget(formGroup.DirectoryToGroups ) }}
+                    {{ form_widget(formGroup.user_to_groups ) }}
                 </div>
             <input type="submit" class="formGroup" style="visibility: hidden"></input>
             {{ form_end(formGroup) }}
@@ -30,3 +30,8 @@
                 </div>
 
     </div>
+        {% block javascripts %}
+            <script>
+                $(".chosen-select").chosen({value: "Select"});
+            </script>
+        {% endblock javascripts %}

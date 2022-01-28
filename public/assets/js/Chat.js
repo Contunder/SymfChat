@@ -126,11 +126,6 @@ let Chat = (function () {
 
     }
 
-    function refresh()
-    {
-        setTimeout(refresh, 5000);
-    }
-
     // ECOUTE LE WEBSOCKET POUR TRAITER LES MESSAGES RECU PAR UN AUTRE UTILISATEUR SEULEMENT
     socket.addEventListener("message", function (e) {
         try {
