@@ -47,7 +47,7 @@ class ChatController extends AbstractController
         # FORMULAIRE DE CREATION DE CONVERSATION
         $newGroup = new Group();
         $groupType = new GroupType();
-        $form = $this->formFactory->createNamedBuilder($groupType->getBlockPrefix() . 'add', GroupType::class, $newGroup, ['id' => $this->getUser()])->getForm();
+        $form = $this->formFactory->createNamedBuilder($groupType->getBlockPrefix() . 'add', GroupType::class, $newGroup, ['id' => $this->getUser()->getId()])->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $newGroup->addUserToGroups($this->getUser());

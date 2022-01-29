@@ -28,11 +28,13 @@
         </div>
         {{ form_end(formGroup) }}
     </div>
-    <script>
-        $(".chosen-select").chosen({value: "Select"});
-    </script>
     {% block modal %}
         {{ render(controller( 'App\\Controller\\FrontChatController::chatApp' )) }}
     {% endblock %}
+    {% block javascripts %}
+        <script>
+            $(".chosen-select").chosen({value: "Select"});
+        </script>
+    {% endblock javascripts%}
 </body>
 {% endblock %}
