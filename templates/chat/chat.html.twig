@@ -10,7 +10,6 @@
         <div class="d-flex align-items-center">
 
             <div class="upload d-flex align-content-end" id="upload">
-
                 <label for="form_upload_add_file" class="file-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
                         <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
@@ -22,6 +21,15 @@
                         {{ form_rest(uploadForm) }}
                     {{ form_end(uploadForm) }}
                 </div>
+            </div>
+
+            <div class="d-flex align-content-end">
+                <label id="vocal">
+                <svg id="startRecordingButton" xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="Black" class="bi bi-mic-fill start" viewBox="0 0 16 16">
+                    <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+                    <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+                </label>
             </div>
 
             <h3 class="fs-xs m-2">
@@ -106,14 +114,38 @@
         <div id="progress" class='progress' style='width:200px'>
             <div class='progress-bar' role='progressbar' style='width: 0%' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100'></div>
         </div>
+
+        <svg id="startRecordingButton" xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="Black"
+             class="bi bi-mic-fill start" viewBox="0 0 16 16">
+            <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+        </svg>
+        <svg id="stopRecordingButton" xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="Red"
+             class="bi bi-mic-fill stop" viewBox="0 0 16 16">
+            <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+        </svg>
+        <svg id="playButton" xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-play-circle play" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+        </svg>
+        <svg id="downloadButton" xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-download send" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+        </svg>
+
     </div>
     {% block javascripts %}
         <script src="{{ asset('assets/js/chat.js') }}"></script>
+        <script src="{{ asset('assets/js/vocal.js') }}"></script>
         <script>
             Chat.init({{ user.id }}, {{ group[0].id }}, "{{ user.Firstname }}", "{{ user.Lastname }}");
             Chat.initWebSocket();
             Chat.initForm();
             Chat.clone();
+            Vocal.init({{ user.id }}, {{ group[0].id }}, "{{ user.Firstname }}", "{{ user.Lastname }}");
+            Vocal.clone();
+            Vocal.vocal();
         </script>
     {% endblock javascripts%}
 </body>

@@ -26,6 +26,7 @@ class UploadType extends AbstractType
                         'maxSize' => '50M',
                         'mimeTypes' => [
                             'image/*',
+                            'audio/x-wav',
                             'application/pdf',
                             'application/msword',
                             'application/vnd.ms-excel',
