@@ -49,14 +49,10 @@ let Vocal = (function () {
                 function (e) {
                     console.log("user consent");
 
-                    // creates the audio context
                     context = new AudioContext();
 
-                    // creates an audio node from the microphone incoming stream
                     mediaStream = context.createMediaStreamSource(e);
 
-                    // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createScriptProcessor
-                    // bufferSize: the onaudioprocess event is called when the buffer is full
                     let bufferSize = 2048;
                     let numberOfInputChannels = 2;
                     let numberOfOutputChannels = 2;
@@ -72,7 +68,6 @@ let Vocal = (function () {
                         recordingLength += bufferSize;
                     }
 
-                    // we connect the recorder
                     mediaStream.connect(recorder);
                     recorder.connect(context.destination);
 
@@ -87,27 +82,19 @@ let Vocal = (function () {
 
         body.on('click', '.stop', function () {
 
-            // stop recording
             recorder.disconnect(context.destination);
             mediaStream.disconnect(recorder);
 
-            // we flat the left and right channels down
-            // Float32Array[] => Float32Array
             let leftBuffer = flattenArray(leftchannel, recordingLength);
             let rightBuffer = flattenArray(rightchannel, recordingLength);
-            // we interleave both channels together
-            // [left[0],right[0],left[1],right[1],...]
             let interleaved = interleave(leftBuffer, rightBuffer);
 
-            // we create our wav file
             let buffer = new ArrayBuffer(44 + interleaved.length * 2);
             let view = new DataView(buffer);
 
-            // RIFF chunk descriptor
             writeUTFBytes(view, 0, 'RIFF');
             view.setUint32(4, 44 + interleaved.length * 2, true);
             writeUTFBytes(view, 8, 'WAVE');
-            // FMT sub-chunk
             writeUTFBytes(view, 12, 'fmt ');
             view.setUint32(16, 16, true); // chunkSize
             view.setUint16(20, 1, true); // wFormatTag
@@ -116,19 +103,16 @@ let Vocal = (function () {
             view.setUint32(28, sampleRate * 4, true); // dwAvgBytesPerSec
             view.setUint16(32, 4, true); // wBlockAlign
             view.setUint16(34, 16, true); // wBitsPerSample
-            // data sub-chunk
             writeUTFBytes(view, 36, 'data');
             view.setUint32(40, interleaved.length * 2, true);
 
-            // write the PCM samples
             let index = 44;
             let volume = 1;
-            for (var i = 0; i < interleaved.length; i++) {
+            for (let i = 0; i < interleaved.length; i++) {
                 view.setInt16(index, interleaved[i] * (0x7FFF * volume), true);
                 index += 2;
             }
 
-            // our final blob
             blob = new Blob([view], {type: 'audio/wav'});
 
             document.getElementById("vocal").innerHTML = "";
@@ -142,8 +126,8 @@ let Vocal = (function () {
                 return;
             }
 
-            var url = window.URL.createObjectURL(blob);
-            var audio = new Audio(url);
+            let url = window.URL.createObjectURL(blob);
+            let audio = new Audio(url);
             audio.play();
         });
 
@@ -152,13 +136,6 @@ let Vocal = (function () {
                 return;
             }
 
-            let url = URL.createObjectURL(blob);
-
-            let a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            a.href = url;
-            a.download = "sample.wav";
             let file = new File([blob],getRandomString(20));
             Chat.sendFile(file);
         })
@@ -167,17 +144,17 @@ let Vocal = (function () {
     function getRandomString(length) {
         let randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let result = '';
-        for ( var i = 0; i < length; i++ ) {
+        for ( let i = 0; i < length; i++ ) {
             result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
         }
         return result;
     }
 
     function flattenArray(channelBuffer, recordingLength) {
-        var result = new Float32Array(recordingLength);
-        var offset = 0;
-        for (var i = 0; i < channelBuffer.length; i++) {
-            var buffer = channelBuffer[i];
+        let result = new Float32Array(recordingLength);
+        let offset = 0;
+        for (let i = 0; i < channelBuffer.length; i++) {
+            let buffer = channelBuffer[i];
             result.set(buffer, offset);
             offset += buffer.length;
         }
@@ -185,12 +162,12 @@ let Vocal = (function () {
     }
 
     function interleave(leftChannel, rightChannel) {
-        var length = leftChannel.length + rightChannel.length;
-        var result = new Float32Array(length);
+        let length = leftChannel.length + rightChannel.length;
+        let result = new Float32Array(length);
 
-        var inputIndex = 0;
+        let inputIndex = 0;
 
-        for (var index = 0; index < length;) {
+        for (let index = 0; index < length;) {
             result[index++] = leftChannel[inputIndex];
             result[index++] = rightChannel[inputIndex];
             inputIndex++;
@@ -199,7 +176,7 @@ let Vocal = (function () {
     }
 
     function writeUTFBytes(view, offset, string) {
-        for (var i = 0; i < string.length; i++) {
+        for (let i = 0; i < string.length; i++) {
             view.setUint8(offset + i, string.charCodeAt(i));
         }
     }
