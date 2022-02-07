@@ -4,8 +4,12 @@ let Chat = (function () {
     let Conversation;
     let UserName;
     let UserLastname;
-    let socket;
     let Route = "https://127.0.0.1:8000/";
+    // CONNEXION AU WEBSOCKET A L'OUVERTURE DE LA PAGE
+    let socket = new WebSocket("ws://127.0.0.1:3001");
+    socket.addEventListener('open', function () {
+        console.log("CONNECTED");
+    });
 
     // PARAMETRE DU SCRIPT
     function init(ParamUser, ParamConversation, ParamUserName, ParamUserLastname) {
@@ -19,12 +23,14 @@ let Chat = (function () {
     let messagePrime;
     let userNamePrime;
     let navBarPrime;
+    let playButtonPrime;
     let messNumber = 0;
     function clone(){
         userMessagePrime = document.getElementById('user-message').cloneNode(true);
         messagePrime = document.getElementById('message').cloneNode(true);
         userNamePrime = document.getElementById('user-name').cloneNode(true);
         navBarPrime = document.getElementById('progress').cloneNode(true);
+        playButtonPrime = document.getElementById('playButton').cloneNode(true);
         messNumber++;
     }
 
@@ -39,12 +45,6 @@ let Chat = (function () {
     let writeMessage;
     let deleteMessage;
     function initWebSocket() {
-
-        // CONNEXION AU WEBSOCKET A L'OUVERTURE DE LA PAGE
-        socket = new WebSocket("ws://127.0.0.1:3001");
-        socket.addEventListener('open', function () {
-            console.log("CONNECTED");
-        });
 
         // ECOUTE LE WEBSOCKET POUR TRAITER LES MESSAGES RECU PAR UN AUTRE UTILISATEUR SEULEMENT
         socket.addEventListener("message", function (e) {
@@ -151,6 +151,7 @@ let Chat = (function () {
         let form = $('form')[0];
         let data = new FormData(form);
         data.append('file', file);
+        console.log(file);
         $.ajax({
             xhr: function() {
                 let xhr = new window.XMLHttpRequest();
@@ -220,7 +221,12 @@ let Chat = (function () {
                         const messageHTML ="<img src='" + message.substring(5) + "' class='rtext' alt='Size "+ messSize +"'/>";
                         document.getElementById("chatBox").appendChild(userMessagePrime).innerHTML = messageHTML;
                         document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
-                    } else {
+                    } else if(message.substring(message.lastIndexOf('.') + 1) === 'wav'){
+                        userMessagePrime.id = messNumber;
+                        const messageHTML = "<audio id='"+ message +"' src='" + message.substring(5) + "' > Your browser does not support the <code>audio</code> element.</audio> <a onclick=\"document.getElementById('"+ message +"').play()\"><svg id=\"playButton\" xmlns=\"http://www.w3.org/2000/svg\" width=\"29\" height=\"29\" fill=\"currentColor\" class=\"bi bi-play-circle play\" viewBox=\"0 0 16 16\"><path d=\"M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z\"/><path d=\"M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z\"/></svg></a>";
+                        document.getElementById("chatBox").appendChild(userMessagePrime).innerHTML = messageHTML;
+                        document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
+                    }else {
                         userMessagePrime.id = messNumber;
                         const messageHTML = "<a href='" + message.substring(5) + "' download='' class='a' >Télécharger <i class='fas fa-download'></i><br>"+messFilename+"<br>"+messSize+" octet</a>";
                         document.getElementById("chatBox").appendChild(userMessagePrime).innerHTML = messageHTML;
@@ -238,7 +244,12 @@ let Chat = (function () {
                         const messageHTML = "<img src='" + message.substring(5) + "' class='ltext' alt='Size "+ messSize +" />";
                         document.getElementById("chatBox").appendChild(messagePrime).innerHTML = messageHTML;
                         document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
-                    } else {
+                    } else if(message.substring(message.lastIndexOf('.') + 1) === 'wav') {
+                        userMessagePrime.id = messNumber;
+                        const messageHTML = "<audio id='"+ message +"' src='" + message.substring(5) + "' > Your browser does not support the <code>audio</code> element.</audio> <a onclick=\"document.getElementById('"+ message +"').play()\"><svg id=\"playButton\" xmlns=\"http://www.w3.org/2000/svg\" width=\"29\" height=\"29\" fill=\"currentColor\" class=\"bi bi-play-circle play\" viewBox=\"0 0 16 16\"><path d=\"M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z\"/><path d=\"M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z\"/></svg></a>";
+                        document.getElementById("chatBox").appendChild(messagePrime).innerHTML = messageHTML;
+                        document.getElementById(messNumber).appendChild(userNamePrime).innerHTML = messUserName + " " + messUserLastname;
+                    }else {
                         messagePrime.id = messNumber;
                         const messageHTML = "<a href='" + message.substring(5) + "' download='' class='a' >Télécharger <i class='fas fa-download'></i><br>"+messFilename+"<br>"+messSize+" octet</a>";
                         document.getElementById("chatBox").appendChild(messagePrime).innerHTML = messageHTML;
@@ -260,6 +271,7 @@ let Chat = (function () {
         initWebSocket: initWebSocket,
         initForm: initForm,
         clone: clone,
+        sendFile: sendFile,
     }
 
 }());
